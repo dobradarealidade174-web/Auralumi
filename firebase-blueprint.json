@@ -1,0 +1,174 @@
+{
+  "entities": {
+    "Professional": {
+      "title": "Professional",
+      "description": "Professional profile and business settings",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "businessName": { "type": "string" },
+        "phone": { "type": "string" },
+        "slug": { "type": "string" },
+        "email": { "type": "string" },
+        "availability": { "type": "object" },
+        "gallery": { "type": "array", "items": { "type": "string" } },
+        "pixKey": { "type": "string" },
+        "depositPercentage": { "type": "number" },
+        "plan": { "type": "string", "enum": ["free", "pro"] }
+      },
+      "required": ["id", "businessName", "slug"]
+    },
+    "Service": {
+      "title": "Service",
+      "description": "Services offered by a professional",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "professionalId": { "type": "string" },
+        "name": { "type": "string" },
+        "duration": { "type": "number" },
+        "price": { "type": "number" },
+        "description": { "type": "string" }
+      },
+      "required": ["professionalId", "name", "duration", "price"]
+    },
+    "Appointment": {
+      "title": "Appointment",
+      "description": "Booking details",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "professionalId": { "type": "string" },
+        "staffId": { "type": "string" },
+        "serviceId": { "type": "string" },
+        "serviceName": { "type": "string" },
+        "clientName": { "type": "string" },
+        "clientPhone": { "type": "string" },
+        "date": { "type": "string", "format": "date-time" },
+        "status": { "type": "string", "enum": ["pending", "confirmed", "cancelled", "completed"] },
+        "finalAmount": { "type": "number" },
+        "commissionAmount": { "type": "number" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["professionalId", "staffId", "serviceId", "clientName", "clientPhone", "date", "status"]
+    },
+    "Staff": {
+      "title": "Staff",
+      "description": "Employee of a professional",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "professionalId": { "type": "string" },
+        "name": { "type": "string" },
+        "email": { "type": "string" },
+        "phone": { "type": "string" },
+        "commissionPercentage": { "type": "number" },
+        "active": { "type": "boolean" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["professionalId", "name", "email", "active"]
+    },
+    "Automation": {
+      "title": "Automation",
+      "description": "Automatic message triggers",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "professionalId": { "type": "string" },
+        "name": { "type": "string" },
+        "triggerType": { "type": "string", "enum": ["days_since_last_visit", "after_booking", "before_booking"] },
+        "triggerValue": { "type": "number" },
+        "messageTemplate": { "type": "string" },
+        "active": { "type": "boolean" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["professionalId", "name", "triggerType", "triggerValue", "messageTemplate", "active"]
+    },
+    "Product": {
+      "title": "Product",
+      "description": "Inventory product",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "professionalId": { "type": "string" },
+        "name": { "type": "string" },
+        "price": { "type": "number" },
+        "costPrice": { "type": "number" },
+        "stock": { "type": "number" },
+        "minStock": { "type": "number" },
+        "category": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["professionalId", "name", "price", "stock"]
+    },
+    "Client": {
+      "title": "Client",
+      "description": "Customer profile",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "professionalId": { "type": "string" },
+        "name": { "type": "string" },
+        "phone": { "type": "string" },
+        "lastVisit": { "type": "string", "format": "date-time" },
+        "totalSpent": { "type": "number" },
+        "appointmentsCount": { "type": "number" },
+        "loyaltyPoints": { "type": "number" },
+        "notes": { "type": "string" },
+        "photos": { "type": "array", "items": { "type": "string" } }
+      },
+      "required": ["professionalId", "name", "phone"]
+    },
+    "Transaction": {
+      "title": "Transaction",
+      "description": "Financial record",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "professionalId": { "type": "string" },
+        "type": { "type": "string", "enum": ["income", "expense"] },
+        "category": { "type": "string", "enum": ["service", "product", "rent", "supplies", "other"] },
+        "amount": { "type": "number" },
+        "description": { "type": "string" },
+        "date": { "type": "string", "format": "date-time" },
+        "relatedId": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["professionalId", "type", "category", "amount", "date"]
+    }
+  },
+  "firestore": {
+    "/professionals/{professionalId}": {
+      "schema": "Professional",
+      "description": "Professional profiles"
+    },
+    "/services/{serviceId}": {
+      "schema": "Service",
+      "description": "Services list"
+    },
+    "/appointments/{appointmentId}": {
+      "schema": "Appointment",
+      "description": "Appointments list"
+    },
+    "/automations/{automationId}": {
+      "schema": "Automation",
+      "description": "Automation triggers"
+    },
+    "/products/{productId}": {
+      "schema": "Product",
+      "description": "Inventory products"
+    },
+    "/transactions/{transactionId}": {
+      "schema": "Transaction",
+      "description": "Financial transactions"
+    },
+    "/clients/{clientId}": {
+      "schema": "Client",
+      "description": "Customer database"
+    },
+    "/staff/{staffId}": {
+      "schema": "Staff",
+      "description": "Staff members"
+    }
+  }
+}

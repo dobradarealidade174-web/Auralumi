@@ -1,0 +1,68 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    
+    // Helper functions
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+    
+    function isOwner(userId) {
+      return isAuthenticated() && request.auth.uid == userId;
+    }
+
+    // Professionals
+    match /professionals/{professionalId} {
+      allow read: if true; // Public for booking
+      allow write: if isOwner(professionalId);
+    }
+
+    // Services
+    match /services/{serviceId} {
+      allow read: if true; // Public for booking
+      allow write: if isAuthenticated() && request.resource.data.professionalId == request.auth.uid;
+    }
+
+    // Appointments
+    match /appointments/{appointmentId} {
+      allow read: if true; // Public to allow double-booking checks
+      allow create: if true; // Anyone can book
+      allow update, delete: if isAuthenticated() && (resource.data.professionalId == request.auth.uid);
+    }
+
+    // Transactions
+    match /transactions/{transactionId} {
+      allow read: if isAuthenticated() && resource.data.professionalId == request.auth.uid;
+      allow create: if isAuthenticated() && request.resource.data.professionalId == request.auth.uid;
+      allow update, delete: if isAuthenticated() && resource.data.professionalId == request.auth.uid;
+    }
+
+    // Clients
+    match /clients/{clientId} {
+      allow read: if isAuthenticated() && resource.data.professionalId == request.auth.uid;
+      allow create: if isAuthenticated() && request.resource.data.professionalId == request.auth.uid;
+      allow update, delete: if isAuthenticated() && resource.data.professionalId == request.auth.uid;
+    }
+
+    // Automations
+    match /automations/{automationId} {
+      allow read: if isAuthenticated() && resource.data.professionalId == request.auth.uid;
+      allow create: if isAuthenticated() && request.resource.data.professionalId == request.auth.uid;
+      allow update, delete: if isAuthenticated() && resource.data.professionalId == request.auth.uid;
+    }
+
+    // Products
+    match /products/{productId} {
+      allow read: if isAuthenticated() && resource.data.professionalId == request.auth.uid;
+      allow create: if isAuthenticated() && request.resource.data.professionalId == request.auth.uid;
+      allow update, delete: if isAuthenticated() && resource.data.professionalId == request.auth.uid;
+    }
+
+    // Staff
+    match /staff/{staffId} {
+      allow read: if true; // Public for booking selection
+      allow create: if isAuthenticated() && request.resource.data.professionalId == request.auth.uid;
+      allow update, delete: if isAuthenticated() && resource.data.professionalId == request.auth.uid;
+    }
+  }
+}

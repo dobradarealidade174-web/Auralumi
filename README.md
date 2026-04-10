@@ -1,11 +1,41 @@
-<div align="center">
+# AgendaPro Estética - SaaS de Agendamento
 
-<img width="1200" height="475" alt="GHBanner" src="https://github.com/user-attachments/assets/0aa67016-6eaf-458a-adb2-6e31a0763ed6" />
+Este é um MVP de um sistema de agendamento para profissionais de estética.
 
-  <h1>Built with AI Studio</h2>
+## 🚀 Como Rodar o Projeto
 
-  <p>The fastest path from prompt to production with Gemini.</p>
+1. **Firebase Setup**:
+   - O sistema utiliza Firebase para Autenticação e Banco de Dados (Firestore).
+   - Certifique-se de que o Firebase foi configurado corretamente no painel do AI Studio.
+   - As regras de segurança estão no arquivo `firestore.rules`.
 
-  <a href="https://aistudio.google.com/apps">Start building</a>
+2. **Instalação**:
+   ```bash
+   npm install
+   ```
 
-</div>
+3. **Desenvolvimento**:
+   ```bash
+   npm run dev
+   ```
+   O servidor rodará na porta 3000.
+
+4. **Acesso**:
+   - Landing Page: `/`
+   - Dashboard Profissional: `/dashboard`
+   - Link de Agendamento: `/b/:slug` (Configure seu slug em Configurações)
+
+## 🛠 Tecnologias
+- **Frontend**: React, Tailwind CSS, Lucide React, Motion.
+- **Backend**: Node.js (Express) servindo o SPA.
+- **Banco/Auth**: Firebase Firestore & Auth.
+
+## 📱 Funcionalidades
+- Agendamento em 3 cliques para clientes.
+- Gestão de serviços e horários.
+- Dashboard com agenda semanal e diária.
+- Geração de links de WhatsApp para comunicação manual (Plano Free).
+- Estrutura pronta para automação via API (Plano Pro).
+
+## 🎨 Design
+Focado em um público feminino, com cores suaves (Rose/Pink) e interface minimalista mobile-first.
