@@ -1,6 +1,12 @@
 import { GoogleGenAI, Type } from "@google/genai";
 
-const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
+const apiKey = process.env.GEMINI_API_KEY || (import.meta as any).env.VITE_GEMINI_API_KEY;
+
+if (!apiKey) {
+  console.warn("GEMINI_API_KEY não encontrada. A consultoria IA não funcionará até que a chave seja configurada nas variáveis de ambiente.");
+}
+
+const ai = new GoogleGenAI({ apiKey: apiKey || "" });
 
 export interface PricingAnalysis {
   diagnostico: string;
